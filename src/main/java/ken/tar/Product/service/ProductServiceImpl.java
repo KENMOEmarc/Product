@@ -1,18 +1,24 @@
 package ken.tar.Product.service;
 
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import ken.tar.Product.entity.Product;
 import ken.tar.Product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+    private final ObjectMapper objectMapper;
     private final ProductRepository theProductRepository ;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository theProductRepository) {
+    public ProductServiceImpl(ObjectMapper objectMapper, ProductRepository theProductRepository) {
+        this.objectMapper = objectMapper;
         this.theProductRepository = theProductRepository;
     }
 
@@ -26,19 +32,27 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProduct(Long id) {
-        Product theProduct = theProductRepository.findById(id);
-        if (theProduct == null) {
-            throw new RuntimeException("Product not found with id: " + id);
-        }
-        return theProduct;
+        return theProductRepository.findById(id);
+    }
+
+    @Override
+    public Product patch(Map<String, Object> patchData, Product existingProduct) {
+        // Convert Product object to a JSON object node
+        ObjectNode productNode = objectMapper.convertValue(existingProduct, ObjectNode.class);
+
+        // Convert the patchPayload map to a JSON object node
+        ObjectNode patchNode = objectMapper.convertValue(patchData, ObjectNode.class);
+
+        // Merge the patch updates into the product node
+        productNode.setAll(patchNode);
+
+        return objectMapper.convertValue(productNode, Product.class);
     }
 
     @Override
     public void deleteProduct(Long id) {
         Product theProduct = theProductRepository.findById(id);
-        if (theProduct == null) {
-            throw new RuntimeException("Product not found with id: " + id);
-        }
+
         theProductRepository.deleteById(id);
     }
 }
