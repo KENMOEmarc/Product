@@ -19,6 +19,7 @@ public class ProductController {
         this.theProductService = theProductService;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @GetMapping
     public List<Product> getAllProducts(){
         return theProductService.findAllProducts();
