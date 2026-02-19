@@ -1,6 +1,7 @@
 package ken.tar.Product.controller;
 
 import ken.tar.Product.entity.Product;
+import ken.tar.Product.exception.ResourceNotFoundException;
 import ken.tar.Product.service.ProductService;
 import ken.tar.Product.service.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class ProductController {
     public Product getProduct(@PathVariable Long id){
         Product theProduct = theProductService.getProduct(id);
         if (theProduct == null) {
-            throw new RuntimeException("Product not found with id: " + id);
+            throw new ResourceNotFoundException("Product not found with id: " + id);
         }
         return theProduct;
     }
@@ -51,7 +52,7 @@ public class ProductController {
         Product dbProduct = theProductService.getProduct(id);
 
         if (dbProduct == null) {
-            throw new RuntimeException("Product id in path and request body do not match");
+            throw new ResourceNotFoundException("Product id in path and request body do not match");
         }
 
         dbProduct.setName(product.getName());
@@ -64,7 +65,7 @@ public class ProductController {
     public Product patchProduct(@PathVariable Long id, @RequestBody Map<String, Object> patchData) {
         Product existingProduct = theProductService.getProduct(id);
         if (existingProduct == null) {
-            throw new RuntimeException("Product not found with id: " + id);
+            throw new ResourceNotFoundException("Product not found with id: " + id);
         }
 
         if (patchData.containsKey("id")) {
@@ -81,7 +82,7 @@ public class ProductController {
     public void deleteProduct(@PathVariable Long id){
         Product theProduct = theProductService.getProduct(id);
         if (theProduct == null) {
-            throw new RuntimeException("Product not found with id: " + id);
+            throw new ResourceNotFoundException("Product not found with id: " + id);
         }
         theProductService.deleteProduct(id);
     }
