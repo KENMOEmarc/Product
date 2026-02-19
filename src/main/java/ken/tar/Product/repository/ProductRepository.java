@@ -10,9 +10,6 @@ public interface ProductRepository {
     List<Product> findAll();
     Void deleteById(long id);
 
-    Product patch(Product product);
-    Product update(Product product);
-
     List<Product> findByName(String name);
     List<Product> findByNameLike(String name);
     List<Product> findByNameContainingLike(String name);
