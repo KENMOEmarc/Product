@@ -1,9 +1,8 @@
 package ken.tar.Product.controller;
 
 import ken.tar.Product.entity.Product;
-import ken.tar.Product.exception.ResourceNotFoundException;
 import ken.tar.Product.service.ProductService;
-import ken.tar.Product.service.ProductServiceImpl;
+import ken.tar.Product.service.impl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,11 +29,12 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id){
-        Product theProduct = theProductService.getProduct(id);
-        if (theProduct == null) {
-            throw new ResourceNotFoundException("Product not found with id: " + id);
-        }
-        return theProduct;
+        return theProductService.getProduct(id);
+    }
+
+    @GetMapping("/search")
+    public List<Product> searchProducts(@RequestParam String name) {
+        return theProductService.findByNameContainingLike(name);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -49,24 +49,13 @@ public class ProductController {
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping("/{id}")
     public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
-        Product dbProduct = theProductService.getProduct(id);
-
-        if (dbProduct == null) {
-            throw new ResourceNotFoundException("Product id in path and request body do not match");
-        }
-
-        dbProduct.setName(product.getName());
-        dbProduct.setPrice(product.getPrice());
-        return theProductService.saveProduct(dbProduct);
+        return theProductService.updateProduct(id , product);
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PatchMapping("/{id}")
     public Product patchProduct(@PathVariable Long id, @RequestBody Map<String, Object> patchData) {
         Product existingProduct = theProductService.getProduct(id);
-        if (existingProduct == null) {
-            throw new ResourceNotFoundException("Product not found with id: " + id);
-        }
 
         if (patchData.containsKey("id")) {
             throw  new RuntimeException("Product id is not allowed in patch request");
@@ -81,9 +70,6 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id){
         Product theProduct = theProductService.getProduct(id);
-        if (theProduct == null) {
-            throw new ResourceNotFoundException("Product not found with id: " + id);
-        }
         theProductService.deleteProduct(id);
     }
 }

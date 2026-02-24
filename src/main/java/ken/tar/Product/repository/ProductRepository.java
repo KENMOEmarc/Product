@@ -10,13 +10,5 @@ public interface ProductRepository {
     List<Product> findAll();
     Void deleteById(long id);
 
-    List<Product> findByName(String name);
-    List<Product> findByNameLike(String name);
     List<Product> findByNameContainingLike(String name);
-
-    List<Product> findByPrice(double price);
-    List<Product> findByPriceGreaterThan(double price);
-    List<Product> findByPriceLessThan(double price);
-    List<Product> findByPriceBetween(double price1, double price2);
-
 }

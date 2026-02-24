@@ -1,7 +1,9 @@
-package ken.tar.Product.service;
+package ken.tar.Product.service.impl;
 
 import ken.tar.Product.entity.Product;
+import ken.tar.Product.exception.ResourceNotFoundException;
 import ken.tar.Product.repository.ProductRepository;
+import ken.tar.Product.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
@@ -31,7 +33,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getProduct(Long id) {
-        return theProductRepository.findById(id);
+        Product theProduct = theProductRepository.findById(id);
+        if (theProduct == null) {
+            throw new ResourceNotFoundException("Product id not found - " + id);
+        }
+        return theProduct;
     }
 
     @Override
@@ -49,9 +55,23 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<Product> findByNameContainingLike(String name) {
+        return theProductRepository.findByNameContainingLike(name);
+    }
+
+
+    @Override
+    public Product updateProduct(Long id, Product product) {
+        Product dbProduct = getProduct(id);
+        product.setName(dbProduct.getName());
+        product.setPrice(dbProduct.getPrice());
+        return theProductRepository.save(product);
+    }
+
+    @Override
     public void deleteProduct(Long id) {
         Product theProduct = theProductRepository.findById(id);
 
-        theProductRepository.deleteById(id);
+        theProductRepository.deleteById(theProduct.getId());
     }
 }

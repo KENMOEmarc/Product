@@ -15,4 +15,8 @@ public interface ProductService {
     void deleteProduct(Long id);
 
     Product patch(Map<String, Object> patchData, Product existingProduct);
+
+    List<Product> findByNameContainingLike(String name);
+
+    Product updateProduct(Long id, Product product);
 }
