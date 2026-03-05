@@ -32,6 +32,7 @@ public class ProductController {
         return theProductService.getProduct(id);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping("/search")
     public List<Product> searchProducts(@RequestParam String name) {
         return theProductService.findByNameContainingLike(name);
