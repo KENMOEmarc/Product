@@ -4,11 +4,15 @@ services:
     container_name: postgres
     restart: always
     ports:
-      - '5433:5432'
+      - '5433:5432'               # Hôte:5433 → Conteneur:5432
+    networks:
+      - product-network
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: productdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   adminer:
     image: adminer
@@ -16,17 +20,31 @@ services:
     restart: always
     ports:
       - '8081:8080'
+    networks:
+      - product-network
+    depends_on:
+      - postgres
 
   product-service:
     build:
-        context: .
+      context: .
     container_name: product-container
     restart: always
     ports:
       - '8082:8080'
+    networks:
+      - product-network
+    depends_on:
+      - postgres
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/productdb
       SPRING_DATASOURCE_USERNAME: admin
       SPRING_DATASOURCE_PASSWORD: admin
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      depends_on: postgres
+
+networks:
+  product-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
