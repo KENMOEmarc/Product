@@ -67,9 +67,9 @@ src
 │ ├── java
 │ │ └── ken/tar/product
 │ │ ├── controller
-│ │ ├── service
+│ │ ├── entity
 │ │ ├── repository
-│ │ ├── model
+│ │ ├── service
 │ │ └── ProductApplication.java
 │ │
 │ └── resources
