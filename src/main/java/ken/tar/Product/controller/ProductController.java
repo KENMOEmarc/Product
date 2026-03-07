@@ -20,7 +20,7 @@ public class ProductController {
         this.theProductService = theProductService;
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<Product> getAllProducts(){
         return theProductService.findAllProducts();
@@ -40,7 +40,7 @@ public class ProductController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Product saveProduct(Product product){
+    public Product saveProduct(@RequestBody Product product){
         // also just in case they pass an id in JSON ... set id to 0
         // this is to force a save of new item ... instead of update
         product.setId(0);

@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jdk-alpine
-LABEL authors="kenmoe"
+LABEL authors="KENMOE Marc"
 
 WORKDIR /app
 

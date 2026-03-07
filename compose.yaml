@@ -8,8 +8,8 @@ services:
     networks:
       - product-network
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: ${USERNAME}
+      POSTGRES_PASSWORD: ${PASSWORD}
       POSTGRES_DB: productdb
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -38,8 +38,8 @@ services:
       - postgres
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/productdb
-      SPRING_DATASOURCE_USERNAME: admin
-      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_DATASOURCE_USERNAME: ${USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${PASSWORD}
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
 
 networks:
