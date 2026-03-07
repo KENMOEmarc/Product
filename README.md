@@ -61,6 +61,7 @@ Represents database tables.
 
 ##  📁 Project Structure
 
+```
 src
 ├── main
 │ ├── java
@@ -76,6 +77,7 @@ src
 │
 └── test
 └── java
+```
 
 
 ---
