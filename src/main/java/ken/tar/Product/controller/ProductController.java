@@ -70,7 +70,6 @@ public class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id){
-        Product theProduct = theProductService.getProduct(id);
         theProductService.deleteProduct(id);
     }
 }
