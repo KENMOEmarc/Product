@@ -14,12 +14,12 @@ import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-    private final ObjectMapper objectMapper;
+    private final ObjectMapper theObjectMapper;
     private final ProductRepository theProductRepository ;
 
     @Autowired
-    public ProductServiceImpl(ObjectMapper objectMapper, ProductRepository theProductRepository) {
-        this.objectMapper = objectMapper;
+    public ProductServiceImpl(ObjectMapper theObjectMapper, ProductRepository theProductRepository) {
+        this.theObjectMapper = theObjectMapper;
         this.theProductRepository = theProductRepository;
     }
 
@@ -43,15 +43,15 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product patch(Map<String, Object> patchData, Product existingProduct) {
         // Convert Product object to a JSON object node
-        ObjectNode productNode = objectMapper.convertValue(existingProduct, ObjectNode.class);
+        ObjectNode productNode = theObjectMapper.convertValue(existingProduct, ObjectNode.class);
 
         // Convert the patchPayload map to a JSON object node
-        ObjectNode patchNode = objectMapper.convertValue(patchData, ObjectNode.class);
+        ObjectNode patchNode = theObjectMapper.convertValue(patchData, ObjectNode.class);
 
         // Merge the patch updates into the product node
         productNode.setAll(patchNode);
 
-        return objectMapper.convertValue(productNode, Product.class);
+        return theObjectMapper.convertValue(productNode, Product.class);
     }
 
     @Override

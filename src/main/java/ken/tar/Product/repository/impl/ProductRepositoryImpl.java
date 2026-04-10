@@ -4,37 +4,36 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import ken.tar.Product.entity.Product;
 import ken.tar.Product.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
-public class ProductRrepositoryImpl implements ProductRepository {
-    private final EntityManager entityManager;
+public class ProductRepositoryImpl implements ProductRepository {
+    private final EntityManager theEntityManager;
 
-    @Autowired
-    public ProductRrepositoryImpl(EntityManager entityManager) {
-        this.entityManager = entityManager;
+
+    public ProductRepositoryImpl(EntityManager theEntityManager) {
+        this.theEntityManager = theEntityManager;
     }
 
     @Override
     public Product findById(long id) {
-        Product theProduct = entityManager.find(Product.class, id);
+        Product theProduct = theEntityManager.find(Product.class, id);
         return theProduct;
     }
 
     @Transactional
     @Override
     public Product save(Product product) {
-        Product dbProduct = entityManager.merge(product);
+        Product dbProduct = theEntityManager.merge(product);
         return dbProduct;
     }
 
     @Override
     public List<Product> findAll() {
-        TypedQuery<Product> query = entityManager.createQuery("SELECT p FROM Product p", Product.class);
+        TypedQuery<Product> query = theEntityManager.createQuery("SELECT p FROM Product p", Product.class);
         List<Product> products = query.getResultList();
 
         return  products;
@@ -45,14 +44,14 @@ public class ProductRrepositoryImpl implements ProductRepository {
     public Void deleteById(long id) {
         Product product = findById(id);
         if (product != null) {
-            entityManager.remove(product);
+            theEntityManager.remove(product);
         }
         return null;
     }
 
     @Override
     public List<Product> findByNameContainingLike(String name) {
-        TypedQuery<Product> query = entityManager
+        TypedQuery<Product> query = theEntityManager
                 .createQuery("SELECT p FROM Product p WHERE LOWER(p.name) LIKE :name", Product.class);
 
         query.setParameter("name", "%" + name.toLowerCase() + "%");
