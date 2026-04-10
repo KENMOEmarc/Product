@@ -1,0 +1,53 @@
+Configuration:
+  status: warn
+  name: MyAppConfig
+  monitorInterval: 30
+
+  Properties:
+    Property:
+      - name: LOG_PATTERN
+        value: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
+      - name: LOG_DIRECTORY
+        value: logs
+      - name: LOG_FILE
+        value: ${LOG_DIRECTORY}/application.json
+
+  Appenders:
+    Console:
+      name: Console
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: "${LOG_PATTERN}"
+
+    RollingFile:
+      name: File
+      fileName: "${LOG_FILE}"
+      filePattern: "${LOG_DIRECTORY}/application-%d{yyyy-MM-dd}-%i.json.gz"
+      JsonLayout:
+        compact: true
+        eventEol: true
+        properties: true
+        stacktraceAsString: true
+      Policies:
+        SizeBasedTriggeringPolicy:
+          size: 10 MB
+        TimeBasedTriggeringPolicy:
+          interval: 1
+          modulate: true
+      DefaultRolloverStrategy:
+        max: 10
+
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+        - ref: Console
+        - ref: File
+
+    Logger:
+      - name: com.example.observe
+        level: debug
+        additivity: false
+        AppenderRef:
+          - ref: Console
+          - ref: File
